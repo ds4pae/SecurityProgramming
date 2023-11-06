@@ -47,11 +47,11 @@ def aesEncForCEK(CEK, KEK, iv):
 def store_USB(salt, encryptedCEK, iv, encryptedPlainText):
     filename = input("USB Stored Filename (ex: PBE_Store.enc):")
     f = open(filename, 'wt')
-    hpk = binascii.hexlify((salt)) + '$*****%'.encode('utf8') \
-          + binascii.hexlify((salt)) + '$*****%'.encode('utf8') \
-          + binascii.hexlify((salt)) + '$*****%'.encode('utf8') \
-          + binascii.hexlify((salt)) + '$*****%'.encode('utf8')
-    f.write(hpk)
+    hpk = binascii.hexlify((salt)) + '$*****$'.encode('utf8') \
+          + binascii.hexlify((salt)) + '$*****$'.encode('utf8') \
+          + binascii.hexlify((salt)) + '$*****$'.encode('utf8') \
+          + binascii.hexlify((salt))
+    f.write(hpk.decode('utf-8'))
     f.close()
 
 def PBE_Encrypt():
@@ -86,14 +86,39 @@ def getInput():
     return alicePassword, plaintext
 
 
+def readUSB():
+    filename = input("USB Stored Filename (ex: PBE_Store.enc):")
+    f = open(filename, 'r')
+    salt, encryptedCEK, iv, encryptedPlainText = f.readline().split("$*****$")
+    salt = bytearray.fromhex(salt)
+    encryptedCEK = bytearray.fromhex(encryptedCEK)
+    iv = bytearray.fromhex(iv)
+    encryptedPlainText = bytearray.fromhex(encryptedPlainText)
+
+
+def aesDecForCEK(encryptedCEK, KEK, iv):
+    decrypedCEK = aesDecrypt(encryptedCEK, KEK, iv)
+    return decrypedCEK
+
 def PBE_Decrypt():
-    pass
+    # alicePassword input
+    alicePassword = inputPW()
+    # Read from USB -> split (Java .subString[:]
+    salt, encryptedCEK, iv, encryptedPlainText = readUSB()
+    # Generate KEK -> Decryption
+    KEK = generateKEK(salt, alicePassword)
+    # encryptedCEK -> Decryption
+    CEK = aesDecForCEK(encryptedCEK, KEK, iv)
+    # encrypted MSG -> Decryption
+    plaintext = aesDecrypt(encryptedPlainText, CEK, iv)
+    return plaintext
 
 
 def main():
     getInput()
     PBE_Encrypt()
-    PBE_Decrypt()
+    output = PBE_Decrypt()
+    print("Final Message: %s", output.decode('utf-8'))
 
 
 if __name__ == "__main__":

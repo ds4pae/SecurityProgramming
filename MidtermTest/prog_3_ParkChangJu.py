@@ -43,7 +43,6 @@ class PBE():
         h = SHA512.new()
         h.update(temp)
         KEK = h.digest()  ### 전체 512비트
-        print("key KEK: ", KEK.hex())
         return KEK[:KEY_SIZE]  ### 전체 512비트 --> 그중에서 256비트 32바이트만 사용함
 
     def generateCEK(self):
