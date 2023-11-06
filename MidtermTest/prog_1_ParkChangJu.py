@@ -2,7 +2,7 @@ import random
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA512
 import string
-from detectEnglish import isEnglish
+from Etc.detectEnglish import isEnglish
 import time
 
 def aesEncrypt(message, key, iv):
