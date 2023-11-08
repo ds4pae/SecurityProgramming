@@ -13,14 +13,14 @@ def B64Encoding(data):
 
 
 def B64Decoding(b64data):
-    data = base64.??????(b64data)
+    data = base64.b64decode(b64data)
     return data
 
 
 def writeToFile(filename, data):
     output = B64Encoding(data)
     with open(filename, "wb") as file_pointer:
-        file_pointer.write(??????)
+        file_pointer.write(output)
         file_pointer.close()
 
 
@@ -28,7 +28,7 @@ def readFromFile(filename):
     with open(filename, "rb") as file_pointer:
         readData = file_pointer.read()
         file_pointer.close()
-    readData = B64Decoding(??????)
+    readData = B64Decoding(readData)
     return readData
 
 
@@ -44,7 +44,7 @@ def inputPlaintextAndGenKey_IV(KEY_SIZE, BLOCK_SIZE):
 
 def generateHMAC(secret, message):
     hmacObj = HMAC.new(secret, digestmod=SHA256)
-    hmacObj.update(??????)
+    hmacObj.update(message)
     print("HMAC: ", hmacObj.digest())
     return hmacObj.digest()
 
@@ -53,7 +53,7 @@ def verifyHMAC(secret, message, macCode):
     hmacObj = HMAC.new(secret, digestmod=SHA256)
     hmacObj.update(message)
     try:
-        hmacObj.verify(??????)   ## .hexverify() 함수를 이용할 경우에는 macCode.hex()로 변경하면 됨...
+        hmacObj.verify(macCode)   ## .hexverify() 함수를 이용할 경우에는 macCode.hex()로 변경하면 됨...
         print("The message '%s' is authentic" % message)
         return True
     except ValueError:
@@ -72,16 +72,16 @@ def genRSAKeys(bitsLength, name):
 
 def rsaEncrypt(message, publicKey):
     pubKey = RSA.importKey(publicKey)   # publicKey 바이트 스트림 --> (n, e) 추출...
-    rsaEncObj = PKCS1_OAEP.new(??????)     # (n, e) 추출된 pubKey를 이용해서 RSA 암호화 객체 생성
-    output = rsaEncObj.encrypt(??????)
+    rsaEncObj = PKCS1_OAEP.new(pubKey)     # (n, e) 추출된 pubKey를 이용해서 RSA 암호화 객체 생성
+    output = rsaEncObj.encrypt(message)
     print("RSA Encrypt: ", output)
     return output
 
 
 def rsaDecrypt(received, privateKey):
-    priKey = RSA.importKey(??????)    # privateKey 바이트 스트림 --> (n, d) 추출...
+    priKey = RSA.importKey(privateKey)    # privateKey 바이트 스트림 --> (n, d) 추출...
     rsaDecObj = PKCS1_OAEP.new(priKey)
-    output2 = rsaDecObj.decrypt(??????)
+    output2 = rsaDecObj.decrypt(received)
     print("RSA Decrypt: ", output2)
     return output2
 
@@ -90,7 +90,7 @@ def rsaDigSignGen(message, priKey):
     hashMsgObj = SHA512.new()
     hashMsgObj.update(message)
     privateKey = RSA.importKey(priKey)
-    signGenFuncObj = PKCS1_v1_5.new(??????)  # privateKey를 이용하여 디지털 서명 객체 생성
+    signGenFuncObj = PKCS1_v1_5.new(privateKey)  # privateKey를 이용하여 디지털 서명 객체 생성
     signMsg = signGenFuncObj.sign(hashMsgObj)  # message의 해시 객체에 대한 서명 과정 진행
     return signMsg
 
@@ -99,7 +99,7 @@ def rsaDigSignVerify(signMsg, message, pubKey):
     hashMsgObj = SHA512.new(message)   # hashMsgObj = SHA512.new(); hashMsgObj.update(message)
     publicKey = RSA.importKey(pubKey)
     signVerifyFuncObj = PKCS1_v1_5.new(publicKey)
-    if signVerifyFuncObj.verify(hashMsgObj, ??????):  # 서명값에 대한 일치 여부 검증(체크)
+    if signVerifyFuncObj.verify(hashMsgObj, signMsg):  # 서명값에 대한 일치 여부 검증(체크)
         return True
     else:
         return False
@@ -107,21 +107,21 @@ def rsaDigSignVerify(signMsg, message, pubKey):
 
 def aesEncrypt(key, iv, plaintext):
     aesEncObj = AES.new(key, AES.MODE_OFB, iv)
-    output = aesEncObj.encrypt(??????)
+    output = aesEncObj.encrypt(plaintext)
     print("AES Encrypt(hex):", output.hex())
     return output
 
 
 def aesDecrypt(key, iv, ciphertext):
     aesDecObj = AES.new(key, AES.MODE_OFB, iv)
-    output = aesDecObj.decrypt(??????)
+    output = aesDecObj.decrypt(ciphertext)
     print("AES Decrypt:", output)
     return output
 
 
 def aesEncWithHash(key, iv, plaintext):
     hashObject = SHA1.new(plaintext)
-    plaintextWithHash = hashObject.hexdigest().encode() + ??????
+    plaintextWithHash = hashObject.hexdigest().encode() + plaintext
     output = aesEncrypt(key, iv, plaintextWithHash)
     return output
 
