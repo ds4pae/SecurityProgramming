@@ -3,21 +3,21 @@ from Crypto.PublicKey import RSA
 
 rsa = RSA.generate(2048)
 
-privateKey = rsa.export_key('PEM')
-print(privateKey)   # RSA Private Key
-
-publicKey = rsa.public_key()
-print(publicKey.export_key('PEM'))    # RSA Public Key
-
 message = b"Hello World!!!"
 
-rsaObj = PKCS1_OAEP.new(publicKey)
+privateKey = b'-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAm3BB5ONWMgmWX4BJ0V3cqlGr5WsxPZfst4Gdh7G7gd3copId\nopqOKwbR3PSH1Oxlfq23QZijuKP6N+tz0x/I1gZj7RXUtb5F/SJQKxqKZHw5dD+M\nJyMlF26Ak+YlJWiOExI/A1CO4z4EuYhFdJ/qwZvB38mpYUSJzC28748Li3LN+ZIG\nV3L2B6qbFc9BFTqJNkpxoxLxrV8WB44pLHzYd694OxfAly4h3QSu0Ip3vlCYTumK\nJIU3t5WjhXIYI/r0hcgyIDZy4aCNTSc9otzdke//ZbkwhLAe0ngKDhvg7fTHytRr\nbB8v0ieS6bCD0wmCGS8dOlu46z3i9TQz3d8ZkwIDAQABAoIBAB4O/9ck9Vq4yukN\n9Hh158HSCGVVrNCF7CNyf8WpY6LSBiQ0EGIM9Fgyueu6J/hPfLMaIdmgDG0c3Lrq\nn9vghiSJWNKUya0ZrgwtEga7265h7XRjA5Xf8IDPADNZqq5IwUzD1warke405JIC\nXbgXYrztA3lk1In4SJOA9sv2xBtDm1yU/1ABTJGb09izNiEVRbgeRHcTY5twoZoQ\nZNR8FWgt62hLa4HB5lgm2xu+ytPJWsO6xEMDuQ03vd9LonBE3JW+Eu9wlS4MV0va\nwEBMwgV4H5zcYaWrskV9zCkVHvi1lGYKegyAuPVD5zOiukVNig31QPb2KGIQ7Sxm\n2YG72YECgYEAuOZBw/Fn6aRlX7J0p8tuSGh7fHwNBaYC3/lSgNzXLjKPCgihEB+h\nVypr6Wusp1mqPXRLaBCJiKePjV55N1XAvkGukJNtYF+lSe2r1vyRqE868j19jdB3\nhJkKdvlaB52pfXtpuEPFPrJJyz7CE0lqpm1AbsZbt9Jif4Zf6wZNpIECgYEA1zXT\n0lnpOP2MFUVWCYBZVNLwfMF2XAoFkGJnrLJnpPPEHcxbpWJIGdQiWwfjuybTP17k\n9ARo119FZoQFieDgLNIR69qf1RP5USpV+qGL85OvQzYw5jhex+l/J74gG/79U99P\nthjaTR0kZgWb5U0JHGvscNwv7ljp8o+VHK8Z5BMCgYA3aQmcZuP1KMcYfqpm/pf2\nKxmWnLZqUu3ZoSYQaB40QgKLxzo9Ur1PGe9s7E+5dy2FbSyL6yjMQyrJ+t3or1Ir\nshNWUFge4YrvNMKikt4zykqn/bV6olau7g4syV0pmx4H9Mwh5G1f9J4Ywp32mbHU\nXjlI+TjTRcEu5l4oWKM8AQKBgQDDw3wWqaEELWei5bp41B7ukR8fbOBcouUizNDg\nAD1ViESKkp1/GKLbk+NYiRm34X5h89Eyw1wXJdu8gDWFkWB6hPC2ad3gdtXg5jDl\n1tO2002nRwE+OmLFWPpIzaLptI7+H3GkBIF3ih3VDB8ee2/hQa8HjtOu7YSKF+Ad\nAo77rwKBgQCWztVVY/m56oJHmiBpgQZZzB4rYyYCJrL39E383v1bNp9DRmShMhU/\nv2QbGGb0rYMvG/dtjdSatBgmD/Fs+Ncub8EqU5taFHQ7t+6GehYBxBT4UMv5hlX6\nEmBr8TRfAFxGVLmvtA1yAC4BGI0nHFYyMfWqe+/Xv8mqpuM8HBgukQ==\n-----END RSA PRIVATE KEY-----'
+publicKey = b'-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm3BB5ONWMgmWX4BJ0V3c\nqlGr5WsxPZfst4Gdh7G7gd3copIdopqOKwbR3PSH1Oxlfq23QZijuKP6N+tz0x/I\n1gZj7RXUtb5F/SJQKxqKZHw5dD+MJyMlF26Ak+YlJWiOExI/A1CO4z4EuYhFdJ/q\nwZvB38mpYUSJzC28748Li3LN+ZIGV3L2B6qbFc9BFTqJNkpxoxLxrV8WB44pLHzY\nd694OxfAly4h3QSu0Ip3vlCYTumKJIU3t5WjhXIYI/r0hcgyIDZy4aCNTSc9otzd\nke//ZbkwhLAe0ngKDhvg7fTHytRrbB8v0ieS6bCD0wmCGS8dOlu46z3i9TQz3d8Z\nkwIDAQAB\n-----END PUBLIC KEY-----'
+privateKeyObject = RSA.importKey(privateKey)
+publicKeyObject = RSA.importKey(publicKey)
+rsaObj = PKCS1_OAEP.new(publicKeyObject)
+
 encMSG = rsaObj.encrypt(message)
+encMSGHex = "2faee6368fb59a38466abb8fbe835b2e14e3c255e1a332a407d37cbb82f098221ab93ea35d4c932e112b54efa48fa03fce78acc088829c9cd9a53294672a52f5f2bfc02c0f3f2d106a6a934a38db8ea8e6465045baa07a5e5c6f599432760316bcea5dd1f8bbd043e6ade1f31587a2633bb3d565d872c8dc62d2d283bc4e777eec036b7c5d048d21196a0f44c4e66b9c7a08ef2a9d76d5b9abab919e6303e5bec2e2f405b572d65cdab3707a937cd6b61d25bb3d9b79c5e119a8320601f18127d900538e1c60d8b3353bb065e50610a8c7b06147acd0483f4247400b2835757ca1d17f8463ecd122c82edb7bf98a291ea477e2d59b860b6926c0f06b31c972a6"
 print()
 print(encMSG)
 
-privateKeyObj = RSA.importKey(privateKey)
-rsa0bj2 = PKCS1_OAEP.new(privateKeyObj)
+
+rsa0bj2 = PKCS1_OAEP.new(privateKeyObject)
 decMSG = rsa0bj2.decrypt(encMSG)
 print()
 print(decMSG.decode('utf-8'))
