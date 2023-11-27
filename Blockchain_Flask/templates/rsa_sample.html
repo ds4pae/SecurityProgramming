@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RSA Encryption</title>
+</head>
+<body>
+**** Plaintext Message :
+    <textarea name="messageArea" rows="1" cols="70">
+        {{ rsa_message }}
+    </textarea>
+<br>
+RSA Encryption Result :
+<form action="rsa_dec_get_post_sample" method="POST">
+    <textarea name="ciphertextArea" rows="10" cols="70">
+        {{ rsa_encryption_result }}
+    </textarea>
+    <input type="submit" value="RSA  복호화">
+
+</body>
+</html>

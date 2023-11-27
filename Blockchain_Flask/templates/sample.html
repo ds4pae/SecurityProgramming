@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+This is sample html
+{{ posts }}
+    {% for post in posts %}
+        <h1> {{ post.title }}</h1>
+        <p>By {{ post.name }} on {{ post.date_after }}</p>
+        <p> {{ post.role }}</p>
+    {% endfor %}
+</body>
+</html>
