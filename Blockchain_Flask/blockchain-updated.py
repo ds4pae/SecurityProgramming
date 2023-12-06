@@ -44,6 +44,9 @@ print(f"Public Key Stored on Blockchain: {myPublicKey}")
 def hello_world():  # put application's code here
     return '<h1>Hello World!!! Blockchain with Flask</h1>'
 
+@app.route('/myname')
+def myName():
+    return 'hong gil dong'
 
 @app.route('/sample')
 def html_sample():
